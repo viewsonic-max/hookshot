@@ -8,56 +8,54 @@ Hookshot uses advanced audio analysis to identify the "hook" in your tracks and 
 
 ## ✨ Features
 
-- **Intelligent Hook Detection**: Multi-feature audio analysis combining energy, spectral centroid, zero-crossing rate, and novelty detection
-- **Genre-Optimized**: Pre-tuned settings for pop, hip-hop, electronic, rock, and acoustic music
-- **Fast Processing**: Unified feature extraction processes a 3-minute track in under 200ms
-- **Visual Feedback**: See what the algorithm detects with Unicode sparkline visualizations
-- **Flexible Output**: Customizable duration, titles, QR codes, and backgrounds
+- **Intelligent Hook Detection**: Multi-feature audio analysis combining energy, spectral centroid, zero-crossing rate, and novelty detection  
+- **Genre-Optimized**: Pre-tuned settings for pop, hip-hop, electronic, rock, and acoustic music  
+- **Fast Processing**: Unified feature extraction processes a 3-minute track in under 200ms  
+- **Visual Feedback**: See what the algorithm detects with Unicode sparkline visualizations  
+- **Flexible Output**: Customizable duration, titles, QR codes, and backgrounds  
 
 ## 🚀 Quick Start
 
-```bash
-# Install globally
-npm install -g hookshot
-
-# Find the hook and create a video
-hookshot -i song.mp3 -o output.mp4 --title "My Track" --subtitle "@artist"
+```powershell
+# Run directly with Node.js
+node src/index.js --in song.mp3 --out output.mp4 --title "My Track" --subtitle "@artist"
 
 # Use genre-specific detection
-hookshot -i track.mp3 --genre electronic --duration 15
+node src/index.js --in track.mp3 --genre electronic --duration 15
 ```
 
 ## 📦 Installation
 
 ### Prerequisites
-- Node.js 14+ 
-- FFmpeg (automatically installed via `@ffmpeg-installer/ffmpeg`)
+- Node.js 14+  
+- FFmpeg (automatically installed via `@ffmpeg-installer/ffmpeg`)  
 
 ### From Source
-```bash
+```powershell
 git clone https://github.com/yourusername/hookshot.git
 cd hookshot
 npm install
-npm link  # Makes 'hookshot' command available globally
 ```
+
+*(You can also use `npm link` if you want the global `hookshot` command, but it’s optional.)*
 
 ## 🎯 Usage
 
 ### Basic Usage
-```bash
-hookshot -i input.mp3
+```powershell
+node src/index.js --in input.mp3
 ```
 
 ### Advanced Options
-```bash
-hookshot \
-  -i song.mp3 \
-  -o tiktok.mp4 \
-  --duration 15 \
-  --genre hiphop \
-  --title "New Heat 🔥" \
-  --subtitle "@producer · Out Now" \
-  --bg background.jpg \
+```powershell
+node src/index.js `
+  --in song.mp3 `
+  --out tiktok.mp4 `
+  --duration 15 `
+  --genre hiphop `
+  --title "New Heat 🔥" `
+  --subtitle "@producer · Out Now" `
+  --bg background.jpg `
   --qr https://link.to/song
 ```
 
@@ -79,37 +77,33 @@ hookshot \
 
 Hookshot uses a sophisticated multi-feature analysis to identify hooks:
 
-### 1. **Unified Feature Extraction**
-Instead of multiple passes through the audio, we extract all features in a single optimized pass:
-- **RMS Energy**: Overall loudness and intensity
-- **Spectral Centroid**: "Brightness" of the sound (higher = more trebly)
-- **Zero-Crossing Rate**: Detects percussive/rhythmic content
-- **Spectral Flux**: Identifies sudden changes and onsets
-- **Novelty Score**: Measures dramatic entrances
+1. **Unified Feature Extraction**  
+   - **RMS Energy**: Overall loudness and intensity  
+   - **Spectral Centroid**: "Brightness" of the sound  
+   - **Zero-Crossing Rate**: Detects percussive/rhythmic content  
+   - **Spectral Flux**: Identifies sudden changes and onsets  
+   - **Novelty Score**: Measures dramatic entrances  
 
-### 2. **Intelligent Scoring**
-Each feature is normalized and weighted based on genre:
-```javascript
-// Hip-hop emphasizes rhythm and bass energy
-hiphop: { energy: 0.4, centroid: 0.2, zcr: 0.25, novelty: 0.15 }
+2. **Intelligent Scoring**  
+   Each feature is normalized and weighted based on genre:  
 
-// Electronic prioritizes dramatic changes
-electronic: { energy: 0.25, centroid: 0.25, zcr: 0.2, novelty: 0.3 }
-```
+   ```javascript
+   hiphop: { energy: 0.4, centroid: 0.2, zcr: 0.25, novelty: 0.15 }
+   electronic: { energy: 0.25, centroid: 0.25, zcr: 0.2, novelty: 0.3 }
+   ```
 
-### 3. **Hook Selection**
-The algorithm slides a window across the track, scoring each position. It includes a "entrance bonus" for sections that start with a dramatic change.
+3. **Hook Selection**  
+   The algorithm slides a window across the track, scoring each position, with an “entrance bonus” for dramatic changes.
 
 ## 📊 Performance
 
-### Benchmarks
-Testing on a MacBook Pro M1 with a 3-minute MP3:
+Testing on a Modern Laptop with a 3-minute MP3:
 
 | Operation | Time | Memory |
 |-----------|------|--------|
 | WAV Conversion | ~450ms | 12MB |
 | Feature Extraction (old) | ~800ms | 48MB |
 | **Feature Extraction (unified)** | **~200ms** | **32MB** |
-| Video Rendering | ~3-5s | 95MB |
+| Video Rendering | ~3–5s | 95MB |
 
 The unified extraction provides a 75% speedup by computing all features in a single pass through the audio data.
