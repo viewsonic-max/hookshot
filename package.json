@@ -1,0 +1,22 @@
+{
+  "name": "hookshot",
+  "version": "0.1.0",
+  "description": "Auto-pick the hook and render a 9:16 audiogram from any track.",
+  "type": "commonjs",
+  "bin": {
+    "hookshot": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js --help"
+  },
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "fft.js": "^4.0.4",
+    "fluent-ffmpeg": "^2.1.2",
+    "fs-extra": "^11.2.0",
+    "node-wav": "^0.0.2",
+    "qrcode": "^1.5.3",
+    "tmp": "^0.2.3",
+    "yargs": "^17.7.2"
+  }
+}
