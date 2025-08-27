@@ -4,7 +4,8 @@
 
 Hookshot uses advanced audio analysis to identify the "hook" in your tracks and creates perfectly-timed vertical videos for TikTok, Instagram Reels, and YouTube Shorts. No more guessing where the best part starts – let the algorithm find it for you.
 
-![Demo](https://img.shields.io/badge/demo-video-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Node](https://img.shields.io/badge/node-%3E%3D14-brightgreen)
+![Demo](https://img.shields.io/badge/demo-video-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+ ![Node](https://img.shields.io/badge/node-%3E%3D14-brightgreen)
 
 ## ✨ Features
 
@@ -107,3 +108,4 @@ Testing on a Modern Laptop with a 3-minute MP3:
 | Video Rendering | ~3–5s | 95MB |
 
 The unified extraction provides a 75% speedup by computing all features in a single pass through the audio data.
+
