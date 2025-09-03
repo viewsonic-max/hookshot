@@ -45,6 +45,12 @@ npm install
 ### Basic Usage
 ```powershell
 node src/index.js --in input.mp3
+
+# Choose detection method
+node src/index.js --in song.mp3 --method energy    # energy/novelty
+node src/index.js --in song.mp3 --method chorus    # repetition/chorus
+node src/index.js --in song.mp3 --method auto      # default: compares and picks
+
 ```
 
 ### Advanced Options
@@ -73,6 +79,12 @@ node src/index.js `
 | `--bg` | | | Background image path |
 | `--qr` | | | URL to encode as QR code |
 | `--font` | | Inter Bold | Path to TTF font file |
+| `--method` | | `auto` | energy, chorus, or auto (compare normalized scores) |
+
+### Method
+- `energy`: weighted mix of energy, spectral centroid, ZCR, and novelty.
+- `chorus`: chroma self-similarity to detect repeated sections (chorus).
+- `auto` (default): runs both, min-max normalizes each method’s window scores, then picks the higher normalized score (slight bias toward `chorus` for repeated hooks).
 
 ## 🧠 How It Works
 
