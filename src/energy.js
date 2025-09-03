@@ -267,7 +267,7 @@ function findBestHook({
     frameSec = result.frameSec;
   } else {
     // Fall back to legacy multi-pass extraction for compatibility
-    const { series: energy, frameSec: energyStep } = rmsSeries(samples, sampleRate, 0.1);
+    const { series: energy, frameSec } = rmsSeries(samples, sampleRate, 0.1);
     const centroid = spectralCentroid(samples, sampleRate, 0.1);
     const { ratio: zcrRatio } = zeroCrossingRate(samples, sampleRate, 0.0464);
     const novelty = noveltyScore(energy);
@@ -319,26 +319,32 @@ function findBestHook({
               + weights.novelty * N[i];
   }
   
-  // Find best window using prefix sum optimization
+  // Windowed search over scores using the actual energy frame step
   const win = Math.max(1, Math.floor(windowSec / frameSec));
+  
+  // prefix-sum for O(L) sliding average
   const ps = new Float32Array(L + 1);
   for (let i = 0; i < L; i++) ps[i + 1] = ps[i] + scores[i];
   
+  // track best and the full range of window scores for normalization
   let best = -Infinity, bestIdx = 0;
+  let scoreMin =  Infinity, scoreMax = -Infinity;
+  
   for (let i = 0; i + win <= L; i++) {
-    // Bonus for dramatic entrance (novelty peak before window)
+    // small "entrance" bonus if novelty spikes just before the window
     const entrance = i > 0 ? N[i - 1] * 0.2 : 0;
-    // Average score in window using prefix sum
     const avg = (ps[i + win] - ps[i]) / win + entrance;
-    if (avg > best) {
-      best = avg;
-      bestIdx = i;
-    }
+  
+    if (avg > best) { best = avg; bestIdx = i; }
+    if (avg < scoreMin) scoreMin = avg;
+    if (avg > scoreMax) scoreMax = avg;
   }
   
   return {
     startSec: bestIdx * frameSec,
     score: best,
+    scoreMin,
+    scoreMax,
     features: {
       energy: E.slice(bestIdx, bestIdx + win),
       centroid: C.slice(bestIdx, bestIdx + win),
@@ -347,6 +353,7 @@ function findBestHook({
     },
     frameSec
   };
+  
 }
 
 // ---------- Genre Presets ----------
